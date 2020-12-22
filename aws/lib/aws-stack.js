@@ -36,7 +36,7 @@ class AwsStack extends cdk.Stack {
     //(s3 is technically flat and just uses naming to create the illusion of directories)
     const resultsBucket = new s3.Bucket(this, `${id}-results-bucket`, {
       blockPublicAccess: {
-        blockPublicAcls: true, 
+        blockPublicAcls: true,
         blockPublicPolicy: true,
         ignorePublicAcls: true,
         restrictPublicBuckets: true
@@ -48,14 +48,15 @@ class AwsStack extends cdk.Stack {
     //lambda to ingest new files and kick off the proper processing lambdas
     //basically driver rating always and champ points as needed
     const delegatorLambda = new lambda.Function(this, `${id}-delegator-lambda`, {
-      code: lambda.Code.fromAsset(path.join(__dirname, '..','delegator','src')),
+      code: lambda.Code.fromAsset(path.join(__dirname, '..', 'delegator', 'src')),
       handler: 'delegatorLambda.handler',
       runtime: lambda.Runtime.NODEJS_12_X
     });
 
-    //this glues our bucket to the delegator. New files kick off the function
-    const resultsFileEvent = new LambdaDestination(delegatorLambda);
-    resultsBucket.addEventNotification(s3.EventType.OBJECT_CREATED, resultsFileEvent);
+    //this glues our bucket to the delegator and gives it read access. New files kick off the function
+    const delegatorNotification = resultsBucket
+      .addEventNotification(s3.EventType.OBJECT_CREATED, new LambdaDestination(delegatorLambda));
+    const delegatorGrant = resultsBucket.grantRead(delegatorLambda);
 
   }
 }
