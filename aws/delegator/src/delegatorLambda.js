@@ -31,11 +31,11 @@ exports.handler = async function (event, context) {
 }
 
 function isConfigFile(fileName) {
-    return !fileName.toLowerCase().contains('config');
+    return !fileName.toLowerCase().includes('config');
 }
 
 async function getEventResult(eventBody) {
-    console.info(`S3 EVENT BODY: ${eventBody}`)
+    console.info(`S3 EVENT BODY: ${JSON.stringify(eventBody)}`)
     const resultsFile = await s3.getObject({
         Bucket: eventBody.bucket.name,
         Key: eventBody.object.key
