@@ -23,12 +23,17 @@ exports.handler = async function (event, context) {
         //then we're in race season land, need to get split and do additional parsing stuff
         const season = key.split('/')[2];
         //getting split will have to come from file title, this is a wild guess on what that looks like
-        const split = results.serverName.substring(1,2);
+        const split = getSplit(results.serverName);
         //so we have the season, the split, what else do we need to call stuff?
         //probably just going to want to construct a whole object and ship it
+        //need to send to DR and scoring
         console.info(`SEASON: ${season}-split ${split}`);
     }
     return context.logStreamName
+}
+
+function getSplit(serverName) {
+    return serverName.substring(1,2);
 }
 
 function isConfigFile(fileName) {

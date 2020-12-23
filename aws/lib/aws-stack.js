@@ -58,7 +58,20 @@ class AwsStack extends cdk.Stack {
       .addEventNotification(s3.EventType.OBJECT_CREATED, new LambdaDestination(delegatorLambda));
     const delegatorGrant = resultsBucket.grantRead(delegatorLambda);
 
+    //definining lambdas for rating and scoring. These won't do much for now, but we'll need to get invoke priveleges setup for the delegator
+    const ratingLambda = new Function(this, `${id}-rating-lambda`, {
+      code:lambda.Code.fromAsset(path.join(__dirname, '..', 'rating','src')),
+      handler: 'driverRating.handler',
+      runtime: lambda.Runtime.NODEJS_12_X //this will eventually be python
+    });
+
+    const ratingLambda = new Function(this, `${id}-scoring-lambda`, {
+      code:lambda.Code.fromAsset(path.join(__dirname, '..', 'scoring','src')),
+      handler: 'scoring.handler',
+      runtime: lambda.Runtime.NODEJS_12_X
+    });
   }
+
 }
 
 module.exports = { AwsStack }
