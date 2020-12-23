@@ -6,7 +6,7 @@ exports.handler = async function (event, context) {
     console.log("EVENT: \n" + JSON.stringify(event, null, 2))
     const eventBody = event.Records[0].s3;
     const key = eventBody.object.key;
-    const results = getEventResult(eventBody);
+    const results = await getEventResult(eventBody);
     console.info(`EVENT INFO: ${results.trackName} ${results.sessionType}`)
     console.info(`SERVER INFO: ${results.serverName}`)
 
@@ -17,6 +17,7 @@ exports.handler = async function (event, context) {
     const directory = key.split('/')[1];
     if(directory === 'quali') {
         //then we're in driver rating land, talk to doug on what addtl files he needs
+        console.info('quali server file');
     } else if (directory === 'season' && !isConfigFile(key.split('/')[3])) {
         //then we're in race season land, need to get split and do additional parsing stuff
         const season = key.split('/')[2];
@@ -24,6 +25,7 @@ exports.handler = async function (event, context) {
         const split = results.serverName.substring(1,2);
         //so we have the season, the split, what else do we need to call stuff?
         //probably just going to want to construct a whole object and ship it
+        console.info(`SEASON: ${season}-split ${split}`);
     }
     return context.logStreamName
 }
@@ -32,8 +34,8 @@ function isConfigFile(fileName) {
     return !fileName.toLowerCase().contains('config');
 }
 
-function getEventResult(eventBody) {
-    console.debug("EVENT: \n" + JSON.stringify(event, null, 2))
+async function getEventResult(eventBody) {
+    console.info(`S3 EVENT BODY: ${eventBody}`)
     const resultsFile = await s3.getObject({
         Bucket: eventBody.bucket.name,
         Key: eventBody.object.key
