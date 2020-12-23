@@ -5,7 +5,7 @@
   "main": "src/index.js",
   "repository": "https://github.com/djpinger/cms-acc.git",
   "scripts": {
-    "copy-static": "cpx \"../{cars,seasonConfig}.{html,png,jpg,css,json}\" ./config",
+    "copy-static": "cpx \"../{cars,seasonConfig}.json\" ./config",
     "test": "jest --coverage --watchAll --env=jsdom",
     "start": "npm run copy-static && ts-node ./src/index.ts"
   },
