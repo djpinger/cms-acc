@@ -15,6 +15,7 @@ exports.handler = async function (event, context) {
 
     //will error handle this array size stuff later, for now it's predictable
     const directory = key.split('/')[1];
+    console.debug(`DIRECTORY: ${directory}`);
     if(directory === 'quali') {
         //then we're in driver rating land, talk to doug on what addtl files he needs
         console.info('quali server file');
@@ -31,7 +32,8 @@ exports.handler = async function (event, context) {
 }
 
 function isConfigFile(fileName) {
-    return !fileName.toLowerCase().includes('config');
+    console.debug(`FILE NAME: ${fileName}`);
+    return fileName.toLowerCase().includes('config');
 }
 
 async function getEventResult(eventBody) {
