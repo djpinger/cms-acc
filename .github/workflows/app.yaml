@@ -22,4 +22,14 @@ jobs:
         with:
           node-version: '12'
 
-      # - name: Build/test/run/deploy/etc - add this stuff in later, also need to cdk bootstrap
+      - name: build
+        run: cd aws && npm install
+
+      - name: install cdk
+        run: npm install -g aws-cdk
+
+      - name: bootstrap cdk
+        run: cdk bootstrap AwsStack
+
+      - name: deploy
+        run: cdk deploy AwsStack --require-approval never
