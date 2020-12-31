@@ -1,9 +1,20 @@
 import path from 'path';
 import fs from 'fs';
-import { RawRaceOrQualifyResult, SeasonConfig } from './models';
+import { RawRaceOrQualifyResult, SeasonConfig, CarConfig } from './modelsRaw';
+
+const memo = {};
+
+function memoize<T>(filepath: string, contents: T){
+  if(!memo[filepath]) {
+    memo[filepath] = contents;
+  }
+  return memo[filepath];
+}
 
 function readJSON<T>(filepath: string): T {
-  console.log(`Loading ${filepath}`);
+  if(process.env.NODE_ENV !== 'test'){
+    console.log(`Loading ${filepath}`);
+  }
   if(!fs.existsSync(filepath)){
     throw `"${filepath}" not found`;
   }
@@ -36,5 +47,17 @@ export function loadRawData(): RawRaceOrQualifyResult[] {
 }
 
 export function loadSeasonConfig(): SeasonConfig {
-  return readJSON(path.join(__dirname, '../', 'config', 'seasonConfig.json'));
+  const filepath = path.join(__dirname, '../', 'config', 'seasonConfig.json');
+  return memoize(filepath, readJSON<SeasonConfig>(filepath));
+}
+
+export function loadCarsConfig(): CarConfig {
+  const filepath = path.join(__dirname, '../', 'config', 'cars.json');
+  return memoize(filepath, readJSON<CarConfig>(filepath));
+}
+
+export function saveToFile(filename: string, data: any): void {
+  const filepath = path.join(__dirname, '../', 'final', `${filename}.json`);
+  const str = JSON.stringify(data, null, 2);
+  fs.writeFileSync(filepath, str);
 }

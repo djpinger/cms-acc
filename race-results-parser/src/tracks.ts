@@ -1,0 +1,46 @@
+export enum TrackNames2018 {
+  Barcelona = 'barcelona',
+  BrandsHatch = 'brands_hatch',
+  Hungaroring = 'hungaroring',
+  Misano = 'misano',
+  Monza = 'monza',
+  Nurburgring = 'nurburgring',
+  PaulRicard = 'paul_ricard',
+  Silverstone = 'silverstone',
+  Spa = 'spa',
+  Zandvoort = 'zandvoort',
+  Zolder = 'zolder',
+}
+
+export enum TrackNames2019 {
+  Barcelona = 'barcelona_2019',
+  BrandsHatch = 'brands_hatch_2019',
+  Hungaroring = 'hungaroring_2019',
+  Kyalami = 'kyalami_2019',
+  LagunaSeca = 'laguna_seca_2019',
+  Misano = 'misano_2019',
+  Monza = 'monza_2019',
+  MountPanorama = 'mount_panorama_2019',
+  Nurburgring = 'nurburgring_2019',
+  PaulRicard = 'paul_ricard_2019',
+  Silverstone = 'silverstone_2019',
+  Spa = 'spa_2019',
+  Suzuka = 'suzuka_2019',
+  Zandvoort = 'zandvoort_2019',
+  Zolder = 'zolder_2019',
+}
+
+export enum TrackNames2020 {
+  Barcelona = 'barcelona_2020',
+  BrandsHatch = 'brands_hatch_2020',
+  Hungaroring = 'hungaroring_2020',
+  Imola = 'imola_2020',
+  Misano = 'misano_2020',
+  Monza = 'monza_2020',
+  Nurburgring = 'nurburgring_2020',
+  PaulRicard = 'paul_ricard_2020',
+  Silverstone = 'silverstone_2020',
+  Spa = 'spa_2020',
+  Zandvoort = 'zandvoort_2020',
+  Zolder = 'zolder_2020',
+}

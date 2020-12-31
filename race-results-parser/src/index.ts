@@ -1,6 +1,13 @@
-import path from  'path';
-import { loadRawData, loadSeasonConfig } from "./dataLoader";
+import { compileDrivers } from "./drivers";
+import { loadRawData, saveToFile } from "./fileSystem";
+import { FinalResults } from "./modelsOutput";
+import { complileRaces } from "./races";
+import { createSplits } from "./splits";
 
-const seasonConfig = loadSeasonConfig();
 const rawSeasonData = loadRawData();
-console.log(rawSeasonData)
+const drivers = compileDrivers(rawSeasonData);
+const resultSplits = createSplits(rawSeasonData);
+const splits = resultSplits.map((splitResults, index) => ({split: index + 1, races: complileRaces(splitResults)}));
+saveToFile('drivers', drivers);
+saveToFile('results', {drivers, splits} as FinalResults);
+// console.log(Object.values(drivers).filter(driver => driver.splits.length > 1).map(driver => driver.driverId))

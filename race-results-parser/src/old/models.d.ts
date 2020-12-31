@@ -11,6 +11,14 @@ export type RawRaceOrQualifyResult = {
   post_race_penalties: Penalty[];
 }
 
+export type RawRaceResult = RawRaceOrQualifyResult & {
+  sessionType: "R",
+}
+
+export type RawQualyResult = RawRaceOrQualifyResult & {
+  sessionType: "Q",
+}
+
 export type SessionResult = {
   bestlap: number;
   bestSplits: number[];
@@ -141,4 +149,12 @@ export type ParsedClassDataClass = {
 export type ParsedClassData = {
   gt3: ParsedClassDataClass[];
   gt4: ParsedClassDataClass[];
+}
+
+export type CarConfig = {
+  cars: (string | null)[];
+  GT3: number[];
+  GT4: number[];
+  PCC: number[];
+  ST: number[];
 }
