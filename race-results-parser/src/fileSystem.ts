@@ -57,7 +57,7 @@ export function loadCarsConfig(): CarConfig {
 }
 
 export function saveToFile(filename: string, data: any): void {
-  const filepath = path.join(__dirname, '../', 'final', `${filename}.json`);
+  const filepath = path.join(__dirname, '../', 'results', `${filename}.json`);
   const str = JSON.stringify(data, null, 2);
   fs.writeFileSync(filepath, str);
 }
