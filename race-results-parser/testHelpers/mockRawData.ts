@@ -16,19 +16,19 @@ export function createSeasonConfig(overrides: Partial<SeasonConfig> = {}): Seaso
         race: [50, 25, 10],
         fastestLap: 1,
         pole: 2,
-        pointsAfterEnd: 2,
+        pointsAfterLast: 2,
       },
       multiSprint: {
         race: [50, 25, 10],
         fastestLap: 1,
         pole: 2,
-        pointsAfterEnd: 1,
+        pointsAfterLast: 1,
       },
       sprint: {
         race: [20, 15, 5],
         fastestLap: 0.5,
         pole: 1,
-        pointsAfterEnd: 1,
+        pointsAfterLast: 1,
       },
     },
     races: [

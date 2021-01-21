@@ -1,6 +1,7 @@
 import path from 'path';
 import fs from 'fs';
-import { RawRaceOrQualifyResult, SeasonConfig, CarConfig } from './modelsRaw';
+import { SeasonConfig, CarConfig } from './modelsConfig';
+import { FinalResults } from './modelsInput';
 
 const memo = {};
 
@@ -33,27 +34,6 @@ function readJSON<T>(filepath: string): T {
   }
 }
 
-export function loadRawData(): RawRaceOrQualifyResult[] {
-  const dataDir = path.join(__dirname, '../', 'data');
-  const files = fs.readdirSync(dataDir);
-
-  return files.reduce((memo, file) => {
-    const filepath = path.join(dataDir, file);
-    if (path.extname(file) == ".json"){
-      const data = readJSON<RawRaceOrQualifyResult>(filepath);
-      // we output results to the same dir as raw files
-      // so we want to filer out non-result files
-      if(data.sessionType){
-        memo.push(data);
-      }
-      else {
-        console.log('Not a results file... ignoring')
-      }
-    }
-    return memo;
-  }, [] as RawRaceOrQualifyResult[]);
-}
-
 export function loadSeasonConfig(): SeasonConfig {
   const filepath = path.join(__dirname, '../', 'config', 'seasonConfig.json');
   return memoize(filepath, readJSON<SeasonConfig>(filepath));
@@ -62,6 +42,11 @@ export function loadSeasonConfig(): SeasonConfig {
 export function loadCarsConfig(): CarConfig {
   const filepath = path.join(__dirname, '../', 'config', 'cars.json');
   return memoize(filepath, readJSON<CarConfig>(filepath));
+}
+
+export function loadResults(): FinalResults {
+  const filepath = path.join(__dirname, '../', 'data', 'compiled', 'compiled-results.json');
+  return memoize(filepath, readJSON<FinalResults>(filepath));
 }
 
 export function saveToFile(filename: string, data: any): void {

@@ -1,0 +1,19 @@
+{
+  "compilerOptions": {
+    "outDir": "./dist",
+    "target": "es5",
+    "strict": true,
+    "module": "CommonJS",
+    "moduleResolution": "node",
+    "jsx": "preserve",
+    "noImplicitAny": false,
+    "lib": ["DOM"],
+    "esModuleInterop": true
+  },
+  "include": [
+    "./src/**/*", "testHelpers",
+  ],
+  "exclude": [
+    "node_modules"
+  ],
+}

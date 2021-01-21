@@ -73,7 +73,6 @@ export function complileRaces(seasonResults: RawRaceOrQualifyResult[]): Race[] {
   const raceAndQually = compileRaceAndQually(seasonResults);
   return Object.entries(raceAndQually).reduce(function(memo, [trackName, raceAndQually]){
     raceAndQually.forEach(function(rq){
-      // console.log(rq.qually?.sessionResult.leaderBoardLines)
       const race = {
         id: trackName,
         raceNumber: rq.raceNumber,

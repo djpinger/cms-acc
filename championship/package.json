@@ -1,16 +1,17 @@
 {
-  "name": "league-results-parser",
+  "name": "league-championship",
   "version": "1.0.0",
-  "description": "Parses and combines ACC server race results",
-  "main": "src/index.ts",
+  "description": "ACC Championship",
+  "main": "src/index.js",
   "repository": "https://github.com/djpinger/cms-acc.git",
   "scripts": {
-    "copy-static": "npm run copy-configs && npm run copy-data",
+    "copy-static": "npm run copy-configs && npm run copy-compiled",
     "copy-configs": "cpx \"../config/*.json\" ./config",
-    "copy-data": "cpx \"../data/*.json\" ./data",
+    "copy-compiled": "cpx \"../race-results-parser/data/compiled-results.json\" ./data",
     "dev": "npm run copy-static && npm run start",
     "test": "NODE_ENV=test jest --coverage --watchAll --env=jsdom",
-    "start": "ts-node ./src/index.ts"
+    "start": "ts-node ./src/index.ts",
+    "watch": "./node_modules/nodemon/bin/nodemon.js --delay 1 --watch data/compiled/compiled-results.json --exec \"npm run start\""
   },
   "keywords": [],
   "author": "kagd",

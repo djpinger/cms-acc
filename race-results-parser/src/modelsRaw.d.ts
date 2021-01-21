@@ -85,26 +85,18 @@ export type Penalty = {
 
 export type RaceFormat = 'endurance' | 'multiSprint' | 'sprint';
 
+export type RaceFormatPoints = {
+  race: number[],
+  pole: number;
+  fastestLap: number;
+  pointsAfterLast: number;
+};
+
 export type SeasonConfig = {
   points: {
-    endurance: {
-      race: number[],
-      pole: number;
-      fastestLap: number;
-      pointsAfterEnd: number;
-    };
-    multiSprint: {
-      race: number[],
-      pole: number;
-      fastestLap: number;
-      pointsAfterEnd: number;
-    };
-    sprint: {
-      race: number[],
-      pole: number;
-      fastestLap: number;
-      pointsAfterEnd: number;
-    };
+    endurance: RaceFormatPoints;
+    multiSprint: RaceFormatPoints;
+    sprint: RaceFormatPoints;
   },
   races: SeasonConfigRace[];
 }

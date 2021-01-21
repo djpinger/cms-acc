@@ -1,0 +1,13 @@
+version: '3'
+
+services:
+  race-results-parser:
+    build: ./race-results-parser
+    volumes:
+      - ./data:/app/data
+      - ./config:/app/config
+  championship:
+    build: ./championship
+    volumes:
+      - ./data:/app/data
+      - ./config:/app/config

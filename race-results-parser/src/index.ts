@@ -9,5 +9,4 @@ const drivers = compileDrivers(rawSeasonData);
 const resultSplits = createSplits(rawSeasonData);
 const splits = resultSplits.map((splitResults, index) => ({split: index + 1, races: complileRaces(splitResults)}));
 saveToFile('drivers', drivers);
-saveToFile('results', {drivers, splits} as FinalResults);
-// console.log(Object.values(drivers).filter(driver => driver.splits.length > 1).map(driver => driver.driverId))
+saveToFile('compiled-results', {drivers, splits} as FinalResults);
