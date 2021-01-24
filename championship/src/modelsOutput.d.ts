@@ -24,7 +24,7 @@ export type Car = {
 }
 
 export type Race = {
-  grid: number;
+  grid: number | null;
   finish: number;
   points: number;
   fastestLap: boolean;

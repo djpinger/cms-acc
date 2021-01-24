@@ -88,6 +88,7 @@ function mapDriverRaces(races: SplitRace[], seasonRace: seasonRace, memo: (Race 
     memo.push(null);
     return memo;
   }
+
   const qualifyingOrder = race.qualifyingOrder[driverCar.class].find(function(qualifyingOrder){
     return qualifyingOrder.driverId === driver.driverId;
   });
@@ -97,30 +98,44 @@ function mapDriverRaces(races: SplitRace[], seasonRace: seasonRace, memo: (Race 
   }) as FinishingOrderClass;
 
   const fastestLap = race.fastestLap[driverCar.class].driverId === driver.driverId;
-  
+
+  // not sure why, but the results have a driver that finished a race, but 
+  // isn't listed in the qualifing
+  const grid = qualifyingOrder?.position || null;
   memo.push({
-    grid: qualifyingOrder?.position || -1,
+    grid,
     finish: finish.position,
-    points: compilePoints(seasonRace, finish, driver),
+    points: compilePoints({seasonRace, finish, driver, fastestLap, grid}),
     fastestLap,
   });
 
   return memo;
 }
 
-function compilePoints(seasonRace: seasonRace, finish: FinishingOrderClass, driver: SeasonDriver): number {
+type CompilePointsParams = {
+  seasonRace: seasonRace;
+  finish: FinishingOrderClass;
+  driver: SeasonDriver;
+  grid: number | null;
+  fastestLap: boolean;
+}
+
+function compilePoints({seasonRace, finish, driver, fastestLap, grid}: CompilePointsParams): number {
   // different car so don't add points since we only
   // account for last car used
   if(driver.currentCar.modelId !== finish.carModelId){
     return 0;
   }
 
-  let points = seasonConfig.points[seasonRace.format].race[finish.position - 1];
-  if(!points){
-    points = seasonConfig.points[seasonRace.format].pointsAfterLast;
+  let racePoints = seasonConfig.points[seasonRace.format].race[finish.position - 1];
+  if(!racePoints){
+    racePoints = seasonConfig.points[seasonRace.format].pointsAfterLast;
   }
 
-  return points;
+  const qualifingPoints = grid === 1 ? seasonConfig.points[seasonRace.format].pole : 0;
+  const fastestLapPoints = fastestLap ? seasonConfig.points[seasonRace.format].fastestLap : 0;
+
+  return racePoints + qualifingPoints + fastestLapPoints;
 }
 
 function driversCarForRace(race: SplitRace, driver: SeasonDriver) {
