@@ -9,8 +9,8 @@ export function isQualifyingResult(seasonResult: RawRaceOrQualifyResult): boolea
 }
 
 export function getSplitNumber(serverName: string): number{
-  const splitRegex = /Split (\d)$/;
-  const matches = serverName.match(splitRegex);
+  const splitRegex = /split (\d)$/;
+  const matches = serverName.toLowerCase().match(splitRegex);
   if(!matches){
     throw new Error(`Split number not found in result.serverName "${serverName}"`);
   }

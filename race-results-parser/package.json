@@ -8,7 +8,8 @@
     "copy-static": "npm run copy-configs && npm run copy-data",
     "copy-configs": "cpx \"../config/*.json\" ./config",
     "copy-data": "cpx \"../data/*.json\" ./data",
-    "dev": "npm run copy-static && npm run start",
+    "remove-static": "rimraf ./data && rimraf ./config",
+    "dev": "npm run remove-static && npm run copy-static && npm run start",
     "test": "NODE_ENV=test jest --coverage --watchAll --env=jsdom",
     "start": "ts-node ./src/index.ts"
   },

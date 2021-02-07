@@ -1,6 +1,6 @@
 import { loadSeasonConfig } from "./fileSystem";
 import { RaceFormat } from "./modelsConfig";
-import { Driver as SeasonDriver, FinishingOrderClass, QualifyingOrderClass, Split, Race as SplitRace, Car } from "./modelsInput";
+import { Driver as SeasonDriver, FinishingOrderClass, Split, Race as SplitRace } from "./modelsInput";
 import { Driver, Race } from "./modelsOutput";
 import _ from "lodash";
 
