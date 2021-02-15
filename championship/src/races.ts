@@ -227,15 +227,12 @@ function parsePenaltyRound(penaltyRoundId: string): number {
 
 function totalPoints(driver: Driver, dropRoundsRaceIds: string[]): number {
   const races = _.compact(driver.races);
-  // const races = driver.races.filter(function(race){
-  //   // filter out null races and drop round races
-  //   return race !== null && !dropRoundsRaceIds.includes(race.id);
-  // }) as Race[];
+  
   return races.reduce(function(memo, race) {
     if(dropRoundsRaceIds.includes(race.id)){
       // omit race points because penalty was served during race
       return memo + race.fastestLapPoints + race.qualifingPoints;
     }
-    return memo + race.raceNumber + race.fastestLapPoints + race.qualifingPoints;
+    return memo + race.racePoints + race.fastestLapPoints + race.qualifingPoints;
   }, 0);
 }
