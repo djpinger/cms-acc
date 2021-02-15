@@ -48,7 +48,6 @@ export function compileSplit(split: Split, seasonDrivers: SeasonDriver[]): {GT3:
       averageFinish: 0,
       polePositions: 0,
       totalPoints: 0,
-      dropRounds: [],
       penaltyRounds: [],
       races: seasonRaces.reduce<(Race | null)[]>(function(memo, seasonRace) {
         return mapDriverRaces(split.races, seasonRace, memo, driver);
@@ -68,13 +67,18 @@ export function compileSplit(split: Split, seasonDrivers: SeasonDriver[]): {GT3:
       penaltyRounds,
     } = dropRoundsAndPenaltyServed(driver);
 
+    driver.races.forEach(function(race){
+      if(race){
+        race.dropRound = dropRounds.includes(race.id);
+      }
+    });
+
     driver.wins = positions.filter(pos => pos === 1).length;
     driver.podiums = positions.filter(pos => pos <= 3).length;
     driver.bestFinish = _.min(positions) as number;
     driver.averageFinish = _.sum(positions) / positions.length;
     driver.polePositions = driver.races.filter(race => race?.grid === 1).length;
     driver.totalPoints = totalPoints(driver, dropRounds);
-    driver.dropRounds = dropRounds;
     driver.penaltyRounds = penaltyRounds;
   });
 
@@ -120,7 +124,8 @@ function mapDriverRaces(races: SplitRace[], seasonRace: seasonRace, memo: (Race 
     grid,
     finish: finish.position,
     fastestLap,
-    ...compilePoints({seasonRace, finish, driver, fastestLap, grid})
+    ...compilePoints({seasonRace, finish, driver, fastestLap, grid}),
+    dropRound: false,
   });
 
   return memo;
