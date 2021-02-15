@@ -1,7 +1,8 @@
 import path from 'path';
 import fs from 'fs';
 import { SeasonConfig, CarConfig } from './modelsConfig';
-import { FinalResults } from './modelsInput';
+import { FinalResults, Penalty } from './modelsInput';
+import csvParse from 'csv-parse/lib/sync';
 
 const memo = {};
 
@@ -47,6 +48,16 @@ export function loadCarsConfig(): CarConfig {
 export function loadResults(): FinalResults {
   const filepath = path.join(__dirname, '../', 'data', 'compiled', 'compiled-results.json');
   return memoize(filepath, readJSON<FinalResults>(filepath));
+}
+
+export function loadPenalties(): Penalty[] {
+  const filepath = path.join(__dirname, '../', 'data', 'penalties.csv');
+  const contents = fs.readFileSync(filepath, {encoding: 'utf8', flag:'r'});
+  const parsedCsv = csvParse(contents, {
+    columns: true,
+    skip_empty_lines: true
+  });
+  return memoize(filepath, parsedCsv);
 }
 
 export function saveToFile(filename: string, data: any): void {

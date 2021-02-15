@@ -86,3 +86,11 @@ export type FinalResults = {
   drivers: Drivers;
   splits: Split[];
 }
+
+export type Penalty = {
+  'Driver Name': string;
+  SID: string;
+  'Round ID': string;
+  'Penalty Given': string;
+  'Penalty Points': string;
+}
