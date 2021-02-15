@@ -172,6 +172,7 @@ function dropRoundsAndPenaltyServed(driver: Driver): {dropRounds: string[], pena
     return race.trackName;
   });
 
+  // combine race points for rounds that have more than 1 race
   const combinedRoundRacePoints = races.reduce(function(memo, race){
     const previousRace = memo.find(pRace => pRace.id === race.id);
 
@@ -185,18 +186,7 @@ function dropRoundsAndPenaltyServed(driver: Driver): {dropRounds: string[], pena
     return memo;
   }, [] as {id: string; racePoints: number}[]);
 
-  // const racesWithNegatedRacePoints = races.reduce(function(memo, race){
-  //   const penaltyWasServedRound = driverPenaltyServedRaceIds.find(id => id === race.id);
-
-  //   if(penaltyWasServedRound){
-  //     memo.push(race);
-  //   }
-  //   else {
-  //     // remove race points since the penalty was served during this round
-  //     memo.push({...race, racePoints: 0});
-  //   }
-  //   return memo;
-  // }, [] as Race[]);
+  // get the 2 minimum scoring rounds, minus those which a penalty was served
   const racesWithNegatedRacePoints = combinedRoundRacePoints.reduce(function(memo, race){
     const penaltyWasServedRound = driverPenaltyServedRaceIds.find(id => id === race.id);
 
