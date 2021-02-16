@@ -4,15 +4,28 @@ import { loadSeasonConfig } from "./fileSystem";
 import _ from  'lodash';
 
 const seasonConfig = loadSeasonConfig();
+const columns = ['#', 'Driver', 'Points', 'Diff', ...raceNames(), 'Wins', 'Poles', 'Podiums', 'Best Finish', 'Average Finish', 'Fastest Lap', 'Drop Rounds', 'Penalty Rounds'];
 
-export function compileCSVForCarClass(data: Driver[], carClass: CarClass){
-  const topPoints = data[0].totalPoints;
-  const dataWithDiff = data.map(function(driver, idx){
-    return [
-      idx + 1,
+export function compileCSVForCarClass(drivers: Driver[], carClass: CarClass){
+  const topPoints = drivers[0].totalPoints;
+  const driversToAppend: Driver[] = [];
+  const data = drivers.reduce(function(memo, driver, idx){
+    if(driverNoLongerInClass(driver, carClass)){
+      driversToAppend.push(driver);
+      return memo;
+    }
+    memo.push(mapDriverRow(driver, idx + 1,  topPoints, carClass));
+    return memo;
+  }, [] as (string|number)[][]);
+
+  data.push(columns.map(c => '-'));
+
+  driversToAppend.forEach(function(driver){
+    data.push([
+      '',
       `${driver.firstName} ${driver.lastName}`,
-      driver.totalPoints,
-      driver.totalPoints -  topPoints,
+      '0',
+      '',
       ...driverRaces(driver, carClass),
       wins(driver),
       poles(driver),
@@ -20,18 +33,37 @@ export function compileCSVForCarClass(data: Driver[], carClass: CarClass){
       bestFinish(driver),
       averageFinish(driver),
       fastestLap(driver),
-      dropRounds(driver).join(', '),
+      '',
       penaltyServed(driver).join(', '),
-    ]
-  })
+
+    ]);
+  });
 
   return stringify(
-    dataWithDiff, 
+    data, 
     {
-      columns: ['#', 'Driver', 'Pts', 'Diff', ...raceNames(), 'Wins', 'Poles', 'Podiums', 'Best Finish', 'Average Finish', 'Fastest Lap', 'Drop Rounds', 'Penalty Rounds'],
+      columns,
       header: true,
     }
   );
+}
+
+function mapDriverRow(driver: Driver, position: number|string, topPoints: number, carClass: CarClass) {
+  return [
+    position,
+    `${driver.firstName} ${driver.lastName}`,
+    driver.totalPoints,
+    driver.totalPoints -  topPoints,
+    ...driverRaces(driver, carClass),
+    wins(driver),
+    poles(driver),
+    podium(driver),
+    bestFinish(driver),
+    averageFinish(driver),
+    fastestLap(driver),
+    dropRounds(driver).join(', '),
+    penaltyServed(driver).join(', '),
+  ];
 }
 
 function raceNames(): string[] {
@@ -114,4 +146,8 @@ function dropRounds(driver: Driver): string[] {
 
 function penaltyServed(driver: Driver): string[] {
   return driver.penaltyRounds.map(penaltyRound =>  seasonConfig.races.find(race => race.trackName === penaltyRound)?.name as string);
+}
+
+function driverNoLongerInClass(driver: Driver, carClass: CarClass): boolean {
+  return driver.car.class !== carClass;
 }

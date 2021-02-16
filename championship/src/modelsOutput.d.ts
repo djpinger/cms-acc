@@ -5,6 +5,7 @@ export type Driver = {
   firstName: string;
   lastName: string;
   car: Car;
+  previousCars: Car[];
   wins: number;
   podiums: number;
   bestFinish: number;

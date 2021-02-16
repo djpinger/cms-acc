@@ -1,7 +1,7 @@
 import { loadPenalties, loadSeasonConfig } from "./fileSystem";
 import { RaceFormat } from "./modelsConfig";
 import { Driver as SeasonDriver, FinishingOrderClass, Split, Race as SplitRace } from "./modelsInput";
-import { Driver, Race } from "./modelsOutput";
+import { Car, Driver, Race } from "./modelsOutput";
 import _ from "lodash";
 
 type seasonRace = {
@@ -42,6 +42,19 @@ export function compileSplit(split: Split, seasonDrivers: SeasonDriver[]): {GT3:
         teamName: driver.currentCar.teamName,
         nationality: driver.currentCar.nationality,
       },
+      previousCars: driver.cars.reduce(function(memo, car){
+        if(car.modelId !== driver.currentCar.modelId){
+          memo.push({
+            modelId: car.modelId,
+            number: car.number,
+            name: car.name,
+            class: car.class,
+            teamName: car.teamName,
+            nationality: car.nationality,
+          });
+        }
+        return memo;
+      }, [] as Car[]),
       wins: 0,
       podiums: 0,
       bestFinish: 0,
@@ -87,8 +100,8 @@ export function compileSplit(split: Split, seasonDrivers: SeasonDriver[]): {GT3:
   });
 
   return {
-    GT3: _.sortBy(drivers.filter(driver => driver.car.class === 'GT3'), ['totalPoints', 'lastName', 'firstName']).reverse(),
-    GT4: _.sortBy(drivers.filter(driver => driver.car.class === 'GT4'), ['totalPoints', 'lastName', 'firstName']).reverse(),
+    GT3: _.sortBy(drivers.filter(driver => [..._.map(driver.previousCars, 'class'), driver.car.class].some(k => k === 'GT3')), ['totalPoints', 'lastName', 'firstName']).reverse(),
+    GT4: _.sortBy(drivers.filter(driver => [..._.map(driver.previousCars, 'class'), driver.car.class].some(k => k === 'GT4')), ['totalPoints', 'lastName', 'firstName']).reverse(),
   }
 }
 
