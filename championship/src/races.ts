@@ -29,7 +29,7 @@ const seasonRaces = seasonConfig.races.reduce(function(memo, race) {
 const DID_NOT_PARTICIPATE_POSITION = 99;
 
 export function compileSplit(split: Split, seasonDrivers: SeasonDriver[]): {GT3: Driver[], GT4: Driver[]} {
-  const drivers: Driver[] = seasonDrivers.map(function(driver) {
+  let drivers: Driver[] = seasonDrivers.map(function(driver) {
     return {
       id: driver.driverId,
       firstName: driver.firstName,
@@ -49,11 +49,14 @@ export function compileSplit(split: Split, seasonDrivers: SeasonDriver[]): {GT3:
       polePositions: 0,
       totalPoints: 0,
       penaltyRounds: [],
+      dropRounds: [],
       races: seasonRaces.reduce<(Race | null)[]>(function(memo, seasonRace) {
         return mapDriverRaces(split.races, seasonRace, memo, driver);
-      }, [])
+      }, []),
     }
   });
+
+  drivers = drivers.filter(driver => _.compact(driver.races).length);
 
   drivers.forEach(function(driver){
     const positions = driver.races.reduce<number[]>(function(memo, race){
@@ -78,6 +81,7 @@ export function compileSplit(split: Split, seasonDrivers: SeasonDriver[]): {GT3:
     driver.bestFinish = _.min(positions) as number;
     driver.averageFinish = _.sum(positions) / positions.length;
     driver.polePositions = driver.races.filter(race => race?.grid === 1).length;
+    driver.dropRounds = dropRounds;
     driver.totalPoints = totalPoints(driver, dropRounds);
     driver.penaltyRounds = penaltyRounds;
   });
@@ -126,6 +130,7 @@ function mapDriverRaces(races: SplitRace[], seasonRace: seasonRace, memo: (Race 
     fastestLap,
     ...compilePoints({seasonRace, finish, driver, fastestLap, grid}),
     dropRound: false,
+    carClass: driverCar.class,
   });
 
   return memo;
@@ -168,7 +173,7 @@ function driversCarForRace(race: SplitRace, driver: SeasonDriver) {
 
 function dropRoundsAndPenaltyServed(driver: Driver): {dropRounds: string[], penaltyRounds: string[]} {
   // filter to only races that have finishes
-  const races = _.compact(driver.races);
+  // const races = _.compact(driver.races);
 
   // Get race ids for each round where penalty was served
   const driverPenaltyServedRaceIds = penalties.filter(p => `S${p.SID}` === driver.id).map(function(penalty){
@@ -178,15 +183,27 @@ function dropRoundsAndPenaltyServed(driver: Driver): {dropRounds: string[], pena
   });
 
   // combine race points for rounds that have more than 1 race
-  const combinedRoundRacePoints = races.reduce(function(memo, race){
-    const previousRace = memo.find(pRace => pRace.id === race.id);
+  const combinedRoundRacePoints = seasonConfig.races.reduce(function(memo, seasonRace){
+    Array.from(new Array(seasonRace.numberOfRaces)).forEach(function(_, index){
+      const race = driver.races.find(r => r?.id === seasonRace.trackName && r.raceNumber === index + 1);
 
-    if(previousRace){
-      previousRace.racePoints = previousRace.racePoints + race.racePoints;
-    }
-    else {
-      memo.push({id: race.id, racePoints: race.racePoints});
-    }
+      if(!race){
+        const previousRace = memo.find(pRace => pRace.id === seasonRace.trackName);
+        if(!previousRace){
+          memo.push({id: seasonRace.trackName, racePoints: 0});
+        }
+        return memo;
+      }
+      
+      const previousRace = memo.find(pRace => pRace.id === race.id);
+
+      if(previousRace){
+        previousRace.racePoints = previousRace.racePoints + race.racePoints;
+      }
+      else {
+        memo.push({id: race.id, racePoints: race.racePoints});
+      }
+    });
 
     return memo;
   }, [] as {id: string; racePoints: number}[]);

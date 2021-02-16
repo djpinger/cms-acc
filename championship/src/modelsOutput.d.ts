@@ -13,6 +13,7 @@ export type Driver = {
   totalPoints: number;
   races: (Race | null)[];
   penaltyRounds: string[];
+  dropRounds: string[];
 }
 
 export type Car = {
@@ -35,4 +36,5 @@ export type Race = {
   totalPoints: number;
   fastestLap: boolean;
   dropRound: boolean;
+  carClass: CarClass;
 }

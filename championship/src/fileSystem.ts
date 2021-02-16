@@ -60,12 +60,20 @@ export function loadPenalties(): Penalty[] {
   return memoize(filepath, parsedCsv);
 }
 
-export function saveToFile(filename: string, data: any): void {
+export enum Extension {
+  JSON = 'json',
+  CSV = 'csv',
+}
+
+export function saveToFile(filename: string, data: any, ext: Extension = Extension.JSON): void {
   const compiledPath = path.join(__dirname, '../', 'data', 'compiled');
   if(!fs.existsSync(compiledPath)){
     fs.mkdirSync(compiledPath);
   }
-  const filepath = path.join(compiledPath, `${filename}.json`);
-  const str = JSON.stringify(data, null, 2);
+  const filepath = path.join(compiledPath, `${filename}.${ext}`);
+  let str: string = data;
+  if(ext === Extension.JSON){
+    str = JSON.stringify(data, null, 2);
+  }
   fs.writeFileSync(filepath, str);
 }
