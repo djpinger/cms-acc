@@ -32,7 +32,7 @@ export function compileDrivers(seasonResults: RawRaceOrQualifyResult[]): Drivers
   const seasonConfig = loadSeasonConfig();
   const drivers: Drivers = {};
   seasonResults.forEach(function(result){
-    if(!isRaceResult(result)){
+    if(!isRaceResult(result) || !seasonConfig.races.find(r => r.trackName === result.trackName)){
       return;
     }
     

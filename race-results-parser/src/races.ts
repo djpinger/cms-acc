@@ -1,4 +1,4 @@
-import { loadCarsConfig } from "./fileSystem";
+import { loadCarsConfig, loadSeasonConfig } from "./fileSystem";
 import { finishingOrder } from "./finishingOrder";
 import { CarClassEnum, FastestLapClass, Race } from "./modelsOutput";
 import { LeaderBoardLine, RawQualyResult, RawRaceOrQualifyResult, RawRaceResult } from "./modelsRaw";
@@ -44,7 +44,13 @@ type RaceAndQuallyList = {
 }
 
 function compileRaceAndQually(seasonResults: RawRaceOrQualifyResult[]): RaceAndQuallyList{
+  const seasonConfig = loadSeasonConfig();
+  
   return seasonResults.reduce(function(memo, result){
+    // ignore result if it's not apart of the seasonConfig
+    if(!seasonConfig.races.find(r => r.trackName === result.trackName)){
+      return memo;
+    }
     const raceNumber = result.sessionType.charAt(1) === '' ? 1 : parseInt(result.sessionType.charAt(1));
     
     if(!memo[result.trackName]) {
