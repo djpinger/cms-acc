@@ -3,6 +3,7 @@ import fs from 'fs';
 import { RawRaceOrQualifyResult, SeasonConfig, CarConfig } from './modelsRaw';
 
 const memo = {};
+const invisibleCharRegex = /[^\x20-\x7E]+/g;
 
 function memoize<T>(filepath: string, contents: T){
   if(!memo[filepath]) {
@@ -22,11 +23,11 @@ function readJSON<T>(filepath: string): T {
   try {
     // Kunos server files are in this format
     const contents = fs.readFileSync(filepath, {encoding: 'utf16le', flag:'r'});
-    return JSON.parse(contents);
+    return JSON.parse(contents.replace(invisibleCharRegex, ''));
   } catch (error) {
     try {
       const contents = fs.readFileSync(filepath, {encoding: 'utf8', flag:'r'});
-      return JSON.parse(contents);
+      return JSON.parse(contents.replace(invisibleCharRegex, ''));
     } catch (error) {
       throw new Error(`JSON parsing failed for utf16 and utf8:\n ${error}`)
     }
