@@ -1,6 +1,7 @@
 export type RaceFormat = 'endurance' | 'multiSprint' | 'sprint';
 
 export type SeasonConfig = {
+  seasonNumber: number;
   points: {
     endurance: {
       race: number[],

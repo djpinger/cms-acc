@@ -7,6 +7,7 @@ const seasonConfig = loadSeasonConfig();
 const columns = ['#', 'Driver', 'Points', 'Diff', ...raceNames(), 'Wins', 'Poles', 'Podiums', 'Best Finish', 'Average Finish', 'Fastest Lap', 'Drop Rounds', 'Penalty Rounds'];
 
 export function compileCSVForCarClass(drivers: Driver[], carClass: CarClass){
+  console.log(carClass, drivers[0]);
   const topPoints = drivers[0].totalPoints;
   const driversToAppend: Driver[] = [];
   const data = drivers.reduce(function(memo, driver, idx){

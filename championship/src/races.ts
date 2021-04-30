@@ -190,10 +190,14 @@ function dropRoundsAndPenaltyServed(driver: Driver): {dropRounds: string[], pena
 
   // Get race ids for each round where penalty was served
   const driverPenaltyServedRaceIds = penalties.filter(p => `S${p.SID}` === driver.id).map(function(penalty){
-    const index = parsePenaltyRound(penalty["Round ID"]) - 1;
-    const race = seasonConfig.races[index];
+    // penalty doesn't match current season
+    const {season, round} = parsePenaltyRound(penalty["Round ID"]);
+    if(seasonConfig.seasonNumber !== season){
+      return null;
+    }
+    const race = seasonConfig.races[round - 1];
     return race.trackName;
-  });
+  }).filter(id => id != null) as string[];
 
   // combine race points for rounds that have more than 1 race
   const combinedRoundRacePoints = seasonConfig.races.reduce(function(memo, seasonRace){
@@ -244,10 +248,16 @@ function dropRoundsAndPenaltyServed(driver: Driver): {dropRounds: string[], pena
 }
 
 // parses round from format "5GT3R2S1"
-// this returns "2" from the string above
-function parsePenaltyRound(penaltyRoundId: string): number {
-  const matches = (penaltyRoundId.match(/^\dGT\dR(\d)/) as RegExpMatchArray);
-  return parseInt(matches[1], 10);
+// 5 is the season
+// GT3 is the category
+// R2 is the  round
+// S1 is ???
+function parsePenaltyRound(penaltyRoundId: string): {season: number, round: number} {
+  const matches = (penaltyRoundId.match(/^(\d)GT\dR(\d)/) as RegExpMatchArray);
+  return {
+    season: parseInt(matches[1], 10),
+    round: parseInt(matches[2], 10),
+  }
 }
 
 function totalPoints(driver: Driver, dropRoundsRaceIds: string[]): number {

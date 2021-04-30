@@ -1,4 +1,5 @@
 {
+  "seasonNumber": 2,
   "points": {
     "endurance": {
       "race": [
@@ -33,37 +34,6 @@
     },
     "multiSprint": {
       "race": [
-        50,
-        45,
-        40,
-        36,
-        33,
-        30,
-        27,
-        24,
-        21,
-        19,
-        17,
-        15,
-        13,
-        11,
-        10,
-        9,
-        8,
-        7,
-        6,
-        5,
-        4,
-        3,
-        2,
-        1
-      ],
-      "pole": 1,
-      "fastestLap": 1,
-      "pointsAfterLast": 1
-    },
-    "sprint": {
-      "race": [
         25,
         22.5,
         20,
@@ -92,67 +62,105 @@
       "pole": 0.5,
       "fastestLap": 0.5,
       "pointsAfterLast": 0
+    },
+    "doubleParking": {
+      "race": [
+        50,
+        45,
+        40,
+        36,
+        33,
+        30,
+        27,
+        24,
+        21,
+        19,
+        17,
+        15,
+        13,
+        11,
+        10,
+        9,
+        8,
+        7,
+        6,
+        5,
+        4,
+        3,
+        2,
+        1
+      ],
+      "pole": 1,
+      "fastestLap": 1,
+      "pointsAfterLast": 0
+    },
+    "sprint": {
+      "race": [
+        50,
+        45,
+        40,
+        36,
+        33,
+        30,
+        27,
+        24,
+        21,
+        19,
+        17,
+        15,
+        13,
+        11,
+        10,
+        9,
+        8,
+        7,
+        6,
+        5,
+        4,
+        3,
+        2,
+        1
+      ],
+      "pole": 1,
+      "fastestLap": 1,
+      "pointsAfterLast": 0
     }
   },
   "races": [
     {
-      "trackName": "zolder_2019",
-      "name": "Zolder",
-      "format": "multiSprint",
-      "numberOfRaces": 1
-    },
-    {
-      "trackName": "misano_2019",
-      "name": "Misano",
-      "format": "sprint",
-      "numberOfRaces": 2
-    },
-    {
-      "trackName": "laguna_seca_2019",
-      "name": "Laguna Seca",
-      "format": "endurance",
-      "numberOfRaces": 1
-    },
-    {
-      "trackName": "nurburgring_2019",
+      "trackName": "nurburgring_2020",
       "name": "Nurburgring",
-      "format": "multiSprint",
+      "format": "sprint",
       "numberOfRaces": 1
     },
     {
-      "trackName": "monza_2019",
+      "trackName": "brands_hatch_2020",
+      "name": "Brands Hatch",
+      "format": "doubleParking",
+      "numberOfRaces": 1
+    },
+    {
+      "trackName": "mount_panorama_2020",
+      "name": "Bathurst",
+      "format": "endurance",
+      "numberOfRaces": 1
+    },
+    {
+      "trackName": "monza_2020",
       "name": "Monza",
-      "format": "sprint",
-      "numberOfRaces": 2
-    },
-    {
-      "trackName": "barcelona_2019",
-      "name": "Barcelona",
-      "format": "endurance",
-      "numberOfRaces": 1
-    },
-    {
-      "trackName": "hungaroring_2019",
-      "name": "Hungaroring",
       "format": "multiSprint",
-      "numberOfRaces": 1
-    },
-    {
-      "trackName": "zandvoort_2019",
-      "name": "Zandvoort",
-      "format": "sprint",
       "numberOfRaces": 2
     },
     {
-      "trackName": "silverstone_2019",
-      "name": "Silverstone",
-      "format": "endurance",
+      "trackName": "imola_2020",
+      "name": "Imola",
+      "format": "doubleParking",
       "numberOfRaces": 1
     },
     {
-      "trackName": "suzuka_2019",
+      "trackName": "suzuka_2020",
       "name": "Suzuka",
-      "format": "multiSprint",
+      "format": "endurance",
       "numberOfRaces": 1
     }
   ]
